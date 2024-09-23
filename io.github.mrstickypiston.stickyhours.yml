@@ -1,7 +1,7 @@
 app-id: io.github.mrstickypiston.stickyhours
 default-branch: 1.0.2
 runtime: org.gnome.Platform
-runtime-version: '45'
+runtime-version: '47'
 sdk: org.gnome.Sdk
 command: stickyhours
 cleanup:
@@ -15,32 +15,13 @@ finish-args:
   - --socket=wayland
   - --socket=fallback-x11
 modules:
-  - name: cpython
+  - python3-packages.yaml
+
+  - name: python3-config-headers
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/bin
-      - cp --archive support/python/bin/* /app/bin
-      - mkdir -p /app/include
-      - cp --archive support/python/include/* /app/include
-      - mkdir -p /app/lib
-      - cp --archive support/python/lib/* /app/lib
-      # Update installation prefix for pip package builds
-      - sed --follow-symlinks -i 's/prefix="\/install"/prefix="\/app"/g' /app/bin/python3-config
-      - sed --follow-symlinks -i 's/prefix=\/install/prefix=\/app/g' /app/lib/pkgconfig/python3.pc /app/lib/pkgconfig/python3-embed.pc
-    sources:
-      - type: dir
-        path: src/support/python
-        dest: support/python
-    cleanup:
-      - /bin/2to3*
-      - /bin/idle*
-      - /lib/python*/config-*
-
-  - name: python-packages
-    no-autogen: true
-    sources:
-      - type: dir
-        path: src/src/
+      - cp /usr/bin/python3-config /app/bin/python3-config
+      - cp -r /usr/include /app
 
   - name: bootstrap
     no-autogen: true
